@@ -155,14 +155,36 @@ class Building:
         window.blit(quantity, (x_pos + 18, y_pos + 50 + space_between_lines))
         window.blit(created, (x_pos + 18, y_pos + 50 + space_between_lines * 2))
 
+    def addUpgrade(self):
+        I = 0
+        II = 9
+        if self.name == 'Cursor':
+            if self.quantity == I:
+                list_of_upgrades.append(Upgrade('Reinforced Index Finger I', cost=self.getTotalCost()*10,
+                                                upgrade=self.name))
+                list_of_upgrades.append(Upgrade('Double Click', cost=1000, upgrade='Mouse'))
+
+            elif self.quantity == II:
+                list_of_upgrades.append(Upgrade('Arthritis Prevention Cream', cost=self.getTotalCost() * 10,
+                                                upgrade=self.name))
+                list_of_upgrades.append(Upgrade('Double Click II', cost=2000, upgrade='Mouse'))
+        elif self.name == 'Grandma':
+            if self.quantity == I:
+                list_of_upgrades.append(Upgrade('Forwards from Grandma', cost=self.getTotalCost() * 10,
+                                                upgrade=self.name))
+            elif self.quantity == II:
+                list_of_upgrades.append(Upgrade('Steel-plated rolling pins', cost=self.getTotalCost() * 10,
+                                                upgrade=self.name))
+
 
 class Upgrade:
     def __init__(self, name, cost, upgrade):
         self.name = name
         self.cost = cost
-
+        self.upgrade = upgrade
         self.x = 700
         self.y = 16
+
         self.length = 60
         self.height = 60
 
@@ -288,8 +310,8 @@ wizard_tower = Building('Cursor', 700, store_y + 64 * 7, wizard_tower_img, wizar
                         increase_per_purchase=1.15, cps=311000)
 list_of_buildings = [cursor, grandma, farm, mine, factory, bank, temple, wizard_tower]
 
-upgrades_x = 700
-upgrades_y = 16
+upgrade_x = 700
+upgrade_y = 16
 list_of_upgrades = []
 
 def format_number(n):
@@ -330,6 +352,20 @@ def draw():
         if building.collidepoint(pygame.mouse.get_pos()):
             building.drawDisplayBox()
 
+    for i in range(0, len(list_of_upgrades)):
+        upgrade = list_of_upgrades[i]
+        upgrade.x = upgrade_x + (i % 5) * 60
+        upgrade.y = upgrade_y + (i // 5) * 60
+
+        if user.score >= upgrade.cost:
+            upgrade.draw(solid=True)
+        else:
+            upgrade.draw(solid=False)
+
+        if upgrade.collidepoint(pygame.mouse.get_pos()):
+            upgrade.drawDisplayBox()
+
+
     window.blit(buildings_wooden_bar, (700, store_y - 16))
     window.blit(upgrades_wooden_bar, (700, 0))
     pygame.display.update()
@@ -351,8 +387,17 @@ while main:
             '''Buy Building'''
             for building in list_of_buildings:
                 if building.collidepoint(mouse_pos) and user.score >= building.getTotalCost():
+                    building.addUpgrade()
+
                     user.score -= building.getTotalCost()
                     building.quantity += 1
+                    user.updateTotalCPS(list_of_buildings)
+
+            for upgrade in list_of_upgrades:
+                if upgrade.collidepoint(mouse_pos) and user.score >= upgrade.cost:
+                    user.score -= upgrade.cost
+                    upgrade.upgradeBuilding(list_of_buildings)
+                    list_of_upgrades.remove(upgrade)
                     user.updateTotalCPS(list_of_buildings)
 
         if event.type == pygame.QUIT:
