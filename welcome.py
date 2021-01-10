@@ -32,6 +32,7 @@ bank_icon = pygame.image.load('image/icons/bank_icon.png')
 temple_icon = pygame.image.load('image/icons/temple_icon.png')
 wizard_tower_icon = pygame.image.load('image/icons/wizard_tower_icon.png')
 
+upgrade_background_frame = pygame.image.load('image/upgrades/upgrade_background_frame.png')
 cursor_upgrade_img = pygame.image.load('image/upgrades/cursor_upgrade_img_1.png')
 grandma_upgrade_img = pygame.image.load('image/upgrades/grandma_upgrade_img_1.png')
 farm_upgrade_img = pygame.image.load('image/upgrades/farm_upgrade_img_1.png')
@@ -160,7 +161,7 @@ class Building:
         II = 9
         if self.name == 'Cursor':
             if self.quantity == I:
-                list_of_upgrades.append(Upgrade('Reinforced Index Finger I', cost=self.getTotalCost()*10,
+                list_of_upgrades.append(Upgrade('Reinforced Index Finger I', cost=(self.getTotalCost() * 10),
                                                 upgrade=self.name))
                 list_of_upgrades.append(Upgrade('Double Click', cost=1000, upgrade='Mouse'))
 
@@ -191,19 +192,19 @@ class Upgrade:
         if upgrade == 'Mouse':
             self.image = mouse_upgrade_img
         elif upgrade == 'Cursor':
-            self.image == cursor_upgrade_img
+            self.image = cursor_upgrade_img
         elif upgrade == 'Grandma':
-            self.image == grandma_upgrade_img
+            self.image = grandma_upgrade_img
         elif upgrade == 'Farm':
-            self.image == farm_upgrade_img
+            self.image = farm_upgrade_img
         elif upgrade == 'Mine':
-            self.image == mine_upgrade_img
+            self.image = mine_upgrade_img
         elif upgrade == 'Factory':
-            self.image == factory_upgrade_img
+            self.image = factory_upgrade_img
         elif upgrade == 'Bank':
-            self.image == bank_upgrade_img
+            self.image = bank_upgrade_img
         elif upgrade == 'Wizard Tower':
-            self.image == wizard_tower_upgrade_img
+            self.image = wizard_tower_upgrade_img
 
     def collidepoint(self, mouse_pos):
         return pygame.Rect(self.x, self.y, self.length, self.height).collidepoint(mouse_pos)
@@ -231,7 +232,7 @@ class Upgrade:
         description_font = pygame.font.Font('Font/ChelseaMarket-Regular.ttf', 14)
         description = description_font.render('{}s are twice as efficient.'.format(self.upgrade), True, WHITE)
 
-        x_pos = 700
+        x_pos = 320
         y_pos = pygame.mouse.get_pos()[1] - 72
         if y_pos < 0:
             y_pos = 0
@@ -252,24 +253,6 @@ class Upgrade:
             cursor.cps *= 2
         elif self.upgrade == 'Grandma':
             grandma.cps *= 2
-        elif self.upgrade == 'Farm':
-            farm.cps *= 2
-        elif self.upgrade == 'Mine':
-            mine.cps *= 2
-        elif self.upgrade == 'Factory':
-            factory.cps *= 2
-        elif self.upgrade == 'Bank':
-            bank.cps *= 2
-        elif self.upgrade == 'Temple':
-            temple.cps *= 2
-        elif self.upgrade == 'Wizard Tower':
-            wizard_tower.cps *= 2
-
-
-
-
-
-
 
 
 class Player:
