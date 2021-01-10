@@ -196,6 +196,59 @@ class Upgrade:
             icon.set_alpha(255)
             frame.set_alpha(255)
 
+        window.blit(frame, (self.x, self.y))
+        window.blit(icon, (icon.get_rect(center=(int(self.x + self.length/2), int(self.y + self.height/2)))))
+
+    def drawDisplayBox(self):
+        upgrade_font = pygame.font.Font('Font/ChelseaMarket-Regular.ttf', 20)
+        upgrade_title = upgrade_font.render('{}'.format(self.name), True, WHITE)
+
+        cost_font = pygame.font.Font('Font/ChelseaMarket-Regular.ttf', 14)
+        cost = cost_font.render('Cost: {}'.format(format_number(self.cost)), True, LIGHT_GREEN)
+
+        description_font = pygame.font.Font('Font/ChelseaMarket-Regular.ttf', 14)
+        description = description_font.render('{}s are twice as efficient.'.format(self.upgrade), True, WHITE)
+
+        x_pos = 700
+        y_pos = pygame.mouse.get_pos()[1] - 72
+        if y_pos < 0:
+            y_pos = 0
+
+        window.blit(building_display_background, (x_pos, y_pos))
+        window.blit(self.image, (x_pos + 3, y_pos + 3))
+        window.blit(upgrade_title, (x_pos + 43, y_pos + 3))
+
+        window.blit(cost, (x_pos + 10, y_pos + 50))
+
+        space_between_lines = 16
+        window.blit(description, (x_pos + 10, y_pos + 50 + space_between_lines))
+
+    def upgradeBuilding(self, list_of_buildings):
+        if self.upgrade == 'Mouse':
+            user.click_multiplier *= 2
+        elif self.upgrade == 'Cursor':
+            cursor.cps *= 2
+        elif self.upgrade == 'Grandma':
+            grandma.cps *= 2
+        elif self.upgrade == 'Farm':
+            farm.cps *= 2
+        elif self.upgrade == 'Mine':
+            mine.cps *= 2
+        elif self.upgrade == 'Factory':
+            factory.cps *= 2
+        elif self.upgrade == 'Bank':
+            bank.cps *= 2
+        elif self.upgrade == 'Temple':
+            temple.cps *= 2
+        elif self.upgrade == 'Wizard Tower':
+            wizard_tower.cps *= 2
+
+
+
+
+
+
+
 
 class Player:
     def __init__(self):
@@ -235,6 +288,9 @@ wizard_tower = Building('Cursor', 700, store_y + 64 * 7, wizard_tower_img, wizar
                         increase_per_purchase=1.15, cps=311000)
 list_of_buildings = [cursor, grandma, farm, mine, factory, bank, temple, wizard_tower]
 
+upgrades_x = 700
+upgrades_y = 16
+list_of_upgrades = []
 
 def format_number(n):
     if n >= 1000000000:
